@@ -7,26 +7,46 @@ import Footor from '@/components/Footor';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import ImageLoader from '@/components/utils/ImageLoader';
-import { getProductById } from '../productService'
+import { getProductById, categories, Product } from '../productService'
 import productData from '../productData'
-
-
+const { data } = productData;
 
 const Page = () => {
-
-    const { data, categories } = productData
-
-    const {id} = useParams();
-    const idNum = Number(id);
-    const product = getProductById(idNum);
-    
+    const { id } = useParams();
     const router = useRouter();
 
-    const [currentImage, setCurrentImage] = useState(product?.mainImage || '');
-    const [currentDisc,setCurrentDisc] = useState('Material')
-    
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [currentImage, setCurrentImage] = useState('');
+    const [currentDisc, setCurrentDisc] = useState('Material');
+
+    // Using primitive id dependency
+    const productId = String(id);
+
+    React.useEffect(() => {
+        async function fetchProduct() {
+            setLoading(true);
+            try {
+                const fetchedProduct = await getProductById(productId);
+                if (fetchedProduct) {
+                    setProduct(fetchedProduct);
+                    setCurrentImage(fetchedProduct.mainImage);
+                }
+            } catch (error) {
+                console.error("Failed to fetch product:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchProduct();
+    }, [productId]);
+
+    if (loading) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>
+    }
+
     if (!product) {
-        return <div>Product not found</div>
+        return <div className="flex justify-center items-center h-screen">Product not found</div>
     }
 
 
@@ -85,10 +105,10 @@ const Page = () => {
                             ))}
                         </div>
                         <p className='mt-[10px] text-[13px] font-light' >{
-                            currentDisc == 'Material' ? data[idNum-1].disc :  
-                            currentDisc == 'Designer' ? data[idNum-1].color :  
-                            currentDisc == 'Type' ? data[idNum-1].care :  
-                            currentDisc == 'Year' ? data[idNum-1].year :  ''}</p>
+                            currentDisc == 'Material' ? product.material :  
+                            currentDisc == 'Designer' ? product.color :  
+                            currentDisc == 'Type' ? product.care :  
+                            currentDisc == 'Year' ? product.year :  ''}</p>
                     </div>
                 </div>
                 
@@ -96,10 +116,10 @@ const Page = () => {
             <div className='mt-[64px] hidden lg:block'>
                 <p className='text-[36px] font-[500] uppercase text-black'>Other Collections</p>
                 <div className="flex flex-row justify-start gap-[14px] mt-[24px] overflow-x-scroll">
-                    {data.slice(idNum, idNum + 10).map((item, index) => (
+                    {data.slice(0, 10).map((item, index) => (
                         <button 
                             key={`desktop-${index}`} 
-                            onClick={() => router.push(`/product/${idNum+1+index}`)}
+                            onClick={() => router.push(`/product/${item.id}`)}
                             className="h-fit relative group bg-white"
                         >
                             <div className="h-[300px] w-[300px] rounded-[20px] overflow-hidden">
@@ -131,7 +151,7 @@ const Page = () => {
                     <Image 
                         unoptimized  src={currentImage} width={1000} height={1000} className='w-full h-[414px] object-cover' alt='Main Image' />
                     <div className='flex  gap-[4px] ' >
-                        {[data[idNum-1].mainImage, data[idNum-1].image, data[idNum-1].image2].map((imgSrc, index) => (
+                        {[product.mainImage, product.image, product.image2].map((imgSrc, index) => (
                             <button 
                                 key={index}
                                 onClick={() => setCurrentImage(imgSrc)}
@@ -153,7 +173,7 @@ const Page = () => {
             <div className='mt-[24px] mx-[16px] lg:mt-[64px]' >
                 <div className='flex lg:flex-row flex-col justify-between items-start my-[12px]' >
                     <p className='text-[18px] font-[500] uppercase' >Description</p>
-                    <p className='mt-[10px] lg:mt-[0px] text-[13px] lg:text-[24px] w-full lg:w-[70%] font-light lg:font-[300]' >{data[idNum-1].disc}</p>
+                    <p className='mt-[10px] lg:mt-[0px] text-[13px] lg:text-[24px] w-full lg:w-[70%] font-light lg:font-[300]' >{product.disc}</p>
                 </div>
 
                 
@@ -170,10 +190,10 @@ const Page = () => {
                         ))}
                     </div>
                     <p className='mt-[10px] text-[13px] font-light' >{
-                        currentDisc == 'Material' ? data[idNum-1].disc :  
-                        currentDisc == 'Designer' ? data[idNum-1].color :  
-                        currentDisc == 'Type' ? data[idNum-1].care :  
-                        currentDisc == 'Year' ? data[idNum-1].year :  ''}</p>
+                        currentDisc == 'Material' ? product.material :  
+                        currentDisc == 'Designer' ? product.color :  
+                        currentDisc == 'Type' ? product.care :  
+                        currentDisc == 'Year' ? product.year :  ''}</p>
                 </div>
                 
 
@@ -183,10 +203,10 @@ const Page = () => {
                 <p className='text-[24px] font-[500] uppercase text-black'  >Other Collections</p>
                 <div className="flex flex-row justify-start gap-[14px] mt-[24px] overflow-x-scroll">
 
-                    {data.slice(idNum, idNum + 10).map((item, index) => (
+                    {data.slice(0, 10).map((item, index) => (
                         <button 
                             key={`desktop-${index}`} 
-                            onClick={() => router.push(`/product/${idNum+1+index}`)}
+                            onClick={() => router.push(`/product/${item.id}`)}
                             className="h-fit relative group bg-white"
                         >
                             <div className="h-[300px] w-[300px] rounded-[20px] overflow-hidden">

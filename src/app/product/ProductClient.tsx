@@ -6,8 +6,7 @@ import Image from 'next/image'
 import React,{useState,useEffect, useMemo} from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { GiSettingsKnobs } from "react-icons/gi";
-import productData from "./productData"
-const { data, categories } = productData;
+import { getProducts, categories, Product } from "./productService"
   
 
 type DataItem = {
@@ -48,8 +47,11 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
 
     const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
     const [mobileViewNavbar,setMobileViewNavbar] = useState(false);
-    const [filteredDataState, setFilteredDataState] = useState<DataItem[]>(data);
+    const [allProducts, setAllProducts] = useState<Product[]>([]);
+    const [filteredDataState, setFilteredDataState] = useState<Product[]>([]);
     const [matchItems,setMatchItems] = useState(true);
+
+    const [loading, setLoading] = useState(true);
     
 
   // Toggle checkbox (user-driven)
@@ -66,7 +68,7 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
 
     if (filtered.length === 0) {
         console.log("⚠️ Filtered data is empty for selected filters:", newSelected);
-        setFilteredDataState(data);
+        setFilteredDataState(allProducts);
         setMatchItems(false);
     } else {
         setFilteredDataState(filtered);
@@ -96,9 +98,9 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
 
     // Filter data
     const filterDataByFilters = (activeFilters: string[]) => {
-        if (activeFilters.length === 0) return data;
+        if (activeFilters.length === 0) return allProducts;
 
-        return data.filter((item) => {
+        return allProducts.filter((item) => {
             const text = normalize(`${item.name} ${item.title} ${item.disc}`);
             const catCategory = normalize(item.cat?.category || "");
             const catSub = normalize(item.cat?.subCategory || "");
@@ -120,39 +122,39 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
     
 
       useEffect(() => {
+        async function loadProducts() {
+            setLoading(true);
+            try {
+                const response = await getProducts(1, 1000);
+                const sorted = [...response.products].sort((a, b) => 
+                    String(a.name).localeCompare(String(b.name))
+                );
+                setAllProducts(sorted);
+                setFilteredDataState(sorted);
+            } catch (error) {
+                console.error("Failed to load products:", error);
+            } finally {
+                setLoading(false);
+            }
+        }
 
-      function sortDataAlphabetically(data: DataItem[]) {
-          return [...data]
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((item, index) => ({
-                  ...item,
-                  id: index + 1
-              }));
-      }
-
-        const sortedData = sortDataAlphabetically(data);
-
-        console.log(sortedData);
+        loadProducts();
 
         const handleStorageChange = () => {
-        const Item = JSON.parse(localStorage.getItem("selectedItem") || "null");
-        if (Item && Item !== "no-filter") {
-            console.log("🔁 Detected storage change, applying filter:", Item);
-            handleFilterChange(Item);
-        }
-    };
+          const Item = JSON.parse(localStorage.getItem("selectedItem") || "null");
+          if (Item && Item !== "no-filter") {
+              console.log("🔁 Detected storage change, applying filter:", Item);
+              handleFilterChange(Item);
+          }
+        };
 
-    // Listen for custom event or localStorage updates
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("productFilterUpdate", handleStorageChange);
+        window.addEventListener("storage", handleStorageChange);
+        window.addEventListener("productFilterUpdate", handleStorageChange);
 
-    // Run once initially too
-    handleStorageChange();
-
-    return () => {
-        window.removeEventListener("storage", handleStorageChange);
-        window.removeEventListener("productFilterUpdate", handleStorageChange);
-    };
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+            window.removeEventListener("productFilterUpdate", handleStorageChange);
+        };
       }, []);
     
 
