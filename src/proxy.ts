@@ -1,8 +1,8 @@
-// src/middleware.ts
+// src/proxy.ts
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/request';
+import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-middleware-pathname', pathname);
@@ -30,3 +30,4 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: ['/hf/admin/:path*'],
 };
+
