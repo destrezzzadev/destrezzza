@@ -13,8 +13,8 @@ const OurLogo = () => {
         <p className='text-[28px] font-[500] lg:text-[36px] uppercase mt-[14px]' >Our signature mark</p>
         <p className='mt-[19px] text-[14px] lg:text-[18px] font-[400] leading-[20px] lg:leading-[28px] w-full lg:w-[60%]' >Our logo is more than just a symbol — it represents who we are, what we believe in, and how we build. Every line and curve reflects our commitment to timeless design, refined craftsmanship, and thoughtful detail.</p>
         <div className='relative mt-[20px] lg:mt-[45px] flex flex-1 justify-center items-center'>
-            <Image blurDataURL='https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FLoader.png?alt=media&token=edd96dbd-3bd3-476b-86e2-e7b2afd1d600'  src={bg} alt="Background Image"  objectFit="cover" />
-            <Image blurDataURL='https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FLoader.png?alt=media&token=edd96dbd-3bd3-476b-86e2-e7b2afd1d600' 
+            <Image blurDataURL='/static/products/Wrk_Loader.png'  src={bg} alt="Background Image"  objectFit="cover" />
+            <Image blurDataURL='/static/products/Wrk_Loader.png' 
               src={logo}
               alt='logo'
               className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[45%] lg:w-[35%] h-auto'

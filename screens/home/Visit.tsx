@@ -17,14 +17,14 @@ const Visit = () => {
         </div>
         <Image 
             
-          src={"https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FZigZag1.png?alt=media&token=faa44047-5224-4d63-a477-5d111dcbe8a2"} alt='Image' 
+          src={"/static/products/Wrk_ZigZag1.png"} alt='Image' 
           height={718} width={682}
           style={{ width: '682px', height: '618px' }}
           data-aos="fade-up"
           className=' w-[628px] h-[594px] hidden lg:flex  object-cover object-center  border-2 border-white rounded-[32px]' />
         <Image 
             
-          src={"https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FZigZag1.png?alt=media&token=faa44047-5224-4d63-a477-5d111dcbe8a2"} alt='Image' 
+          src={"/static/products/Wrk_ZigZag1.png"} alt='Image' 
           height={718} width={682}
           style={{ width: '682px', height: '317px' }}
           data-aos="fade-up"

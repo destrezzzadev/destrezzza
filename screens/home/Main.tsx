@@ -296,7 +296,7 @@ const Main = () => {
             data-aos="fade-up"
             className="mx-[16px] relative h-[200px] bg-cover bg-center rounded-xl overflow-hidden border-white"
             style={{ 
-              backgroundImage: `url("https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FArthene3.jpg?alt=media&token=33e17a71-d97f-45c2-8b7f-ac4a2dfe258f")`,
+              backgroundImage: `url("/static/products/Wrk_Arthene3.jpg")`,
               backgroundPosition: "left",
               backgroundSize: "cover",
               borderRadius: 20
@@ -314,7 +314,7 @@ const Main = () => {
             className="mx-[16px] relative h-[200px] bg-cover bg-center rounded-xl overflow-hidden 
                        border-white"   // 👈 add border classes here
             style={{ 
-              backgroundImage: `url("https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FCosmos1.png?alt=media&token=cc19c536-4f5c-451b-a5f0-6b29188c8592")`,
+              backgroundImage: `url("/static/products/Wrk_Cosmos1.png")`,
               backgroundPosition: "left",
               backgroundSize: "cover",
               borderRadius: 20
@@ -331,7 +331,7 @@ const Main = () => {
             className="mx-[16px] relative h-[200px] bg-cover bg-center rounded-xl overflow-hidden 
                        border-white"   // 👈 add border classes here
             style={{ 
-              backgroundImage: `url("https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FDavrik3.jpg?alt=media&token=0c612c17-c376-4b02-b519-9d76b5176e45")`,
+              backgroundImage: `url("/static/products/Wrk_Davrik3.jpg")`,
               backgroundPosition: "left",
               backgroundSize: "cover",
               borderRadius: 20

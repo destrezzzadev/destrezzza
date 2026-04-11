@@ -333,7 +333,7 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
 
                                     {/* Image */}
                                     <Image
-                                        blurDataURL='https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FLoader.png?alt=media&token=edd96dbd-3bd3-476b-86e2-e7b2afd1d600'
+                                        blurDataURL='/static/products/Wrk_Loader.png'
                                         src={item.mainImage}
                                         alt={item.name}
                                         fill

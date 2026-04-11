@@ -71,7 +71,7 @@ const Footor = () => {
 
             {/* <div className='flex justify-center items-center' >
                 <p className='text-[17vw] font-[600] flex justify-center items-center' >DESTRE
-                    <Image blurDataURL='https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FLoader.png?alt=media&token=edd96dbd-3bd3-476b-86e2-e7b2afd1d600'  src={logo} alt='logo' className='h-[12vw] w-auto '  />A</p>
+                    <Image blurDataURL='/static/products/Wrk_Loader.png'  src={logo} alt='logo' className='h-[12vw] w-auto '  />A</p>
             </div> */}
             {/* <p className='text-center font-[600] text-[5vw] mt-[-12vh] mb-[40px] w-[90%] mx-auto '>
                 ART HOUSE

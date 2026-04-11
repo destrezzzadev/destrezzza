@@ -89,7 +89,7 @@ const Page = () => {
 
         <div className='mt-[24px] lg:mt-[80px] mx-[16px] lg:mx-[48px] h-auto lg:h-[80vh] overflow-hidden flex lg:flex-row flex-col gap-[48px] justify-center items-center' >
             <Image 
-                blurDataURL='https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FLoader.png?alt=media&token=edd96dbd-3bd3-476b-86e2-e7b2afd1d600'  
+                blurDataURL='/static/products/Wrk_Loader.png'  
                 src={I2} className='w-[50%] h-auto hidden lg:flex mt-[74px]' alt='Image' />
             <div className='flex flex-1 h-full flex-col justify-between items-start w-full lg:max-w-[50%]' >
                 <div className='flex flex-col flex-1' >
@@ -97,7 +97,7 @@ const Page = () => {
                     <p className='text-[14px] lg:text-[18px] font-[400] leading-[28px] mt-[15px]' >At the heart of our process is a deep respect for design, material, and the spaces we help shape. From initial sketches to final finishes, our approach blends traditional craftsmanship with modern precision — ensuring every piece we create is as functional as it is beautiful. We listen, we collaborate, and we build with intention, crafting furniture that feels personal, purposeful, and enduring.</p>
                 </div>
                 <Image 
-                    blurDataURL='https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FLoader.png?alt=media&token=edd96dbd-3bd3-476b-86e2-e7b2afd1d600'  
+                    blurDataURL='/static/products/Wrk_Loader.png'  
                     src={I2} className='w-full h-[412px] lg:hidden  mt-[15px] object-cover object-bottom' alt='Image' />
                 <div className='hidden lg:block' >
                     <ul className='text-[18px] font-[400] uppercase flex flex-col gap-[28px]' >
@@ -121,7 +121,7 @@ const Page = () => {
 
         
         <div className='relative w-screen h-[196px] lg:h-[720px] mt-[24px] lg:mt-[80px]' >
-            <Image blurDataURL='https://firebasestorage.googleapis.com/v0/b/fir-e4bcf.appspot.com/o/Wrk%2FLoader.png?alt=media&token=edd96dbd-3bd3-476b-86e2-e7b2afd1d600'  
+            <Image blurDataURL='/static/products/Wrk_Loader.png'  
             src={I3} className='w-screen h-[196px] lg:h-[400px] object-cover' alt='Image' layout="fill" />
             <div className='absolute inset-0 bg-[#1414144D] flex justify-center items-center px-[5%]' >
                 <p className='text-white text-[18px] lg:text-[78px] leading-[30px] lg:leading-[78px] uppercase text-center font-[500]' >“We craft more than furniture — we create tailored pieces that reflect your lifestyle, taste, and story.”</p>
