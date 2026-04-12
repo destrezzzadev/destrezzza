@@ -7,6 +7,7 @@ import React,{useState,useEffect, useMemo} from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { GiSettingsKnobs } from "react-icons/gi";
 import { getProducts, categories, Product } from "./productService"
+import { ProductGridSkeleton } from "@/components/product/ProductSkeleton"
   
 
 type DataItem = {
@@ -221,13 +222,20 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
                 </div>
                 <div>
                     <div className='w-[70vw]' >
-                        {matchItems ? '' : <p className='text-[24px] mb-[12px]' >Sorry No items, showing all Products</p> }
-                        {matchItems ? '' : <button
-                            onClick={resetFilter}
-                            className='text-[14px] mb-[12px] bg-black text-white px-[24px] py-[5px] rounded-[24px]' >Reset Filter</button> }
+                        {loading ? null : (matchItems ? '' : <p className='text-[24px] mb-[12px]' >Sorry No items, showing all Products</p> )}
+                        {!loading && !matchItems && (
+                            <button
+                                onClick={resetFilter}
+                                className='text-[14px] mb-[12px] bg-black text-white px-[24px] py-[5px] rounded-[24px]'
+                            >
+                                Reset Filter
+                            </button>
+                        )}
                     </div>
-                    {
-                        matchItems ?
+                    {loading ? (
+                        <ProductGridSkeleton count={6} />
+                    ) : (
+                        matchItems && (
                             <div className="hidden lg:grid grid-cols-2 h-fit justify-start gap-[8px] gap-x-[8px] ">
                         
                                 {filteredDataState.map((item, index) => (
@@ -255,8 +263,8 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
                                     </button>
                                 ))}
                             </div>
-                        : ''
-                    }
+                        )
+                    )}
                 </div>
             </div>
 
@@ -313,44 +321,53 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
                     </button>
                 </div>
                 <div className='w-[70vw]' >
-                    {matchItems ? '' : <p className='text-[12px]' >Sorry No items, showing all Products</p> }
-                    {matchItems ? '' : <button
-                        onClick={resetFilter}
-                        className='text-[12px] mt-[12px] mb-[12px] bg-black text-white px-[24px] py-[5px] rounded-[24px]' >Reset Filter</button> }
+                    {loading ? null : (matchItems ? '' : <p className='text-[12px]' >Sorry No items, showing all Products</p> )}
+                    {!loading && !matchItems && (
+                        <button
+                            onClick={resetFilter}
+                            className='text-[12px] mt-[12px] mb-[12px] bg-black text-white px-[24px] py-[5px] rounded-[24px]'
+                        >
+                            Reset Filter
+                        </button>
+                    )}
                 </div>
-                {matchItems ?
-                    <div className="lg:hidden grid grid-cols-2 gap-[3px] gap-y-[3px] mt-[14px] w-full">
-                        {filteredDataState.map((item, index) => (
-                            <button 
-                                key={`mobile-${index}`} 
-                                onClick={() => router.push(`/product/${item.id}`)}
-                                className="flex flex-col h-fit"
-                                >
-                                <div className="relative h-[45vw] w-full rounded-[8px] overflow-hidden">
-                                    {/* Gradient overlay */}
-                                    <p className={` ${newProducts.includes(index) ? 'flex' : 'hidden'} z-10 absolute top-[12px] left-[12px] px-[8px] py-[0px] text-[12px] font-bold rounded-[12px] uppercase bg-white`} >NEW</p>
-                                    <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#00000040] to-transparent"></div>
+                {loading ? (
+                    <ProductGridSkeleton count={4} />
+                ) : (
+                    matchItems && (
+                        <div className="lg:hidden grid grid-cols-2 gap-[3px] gap-y-[3px] mt-[14px] w-full">
+                            {filteredDataState.map((item, index) => (
+                                <button 
+                                    key={`mobile-${index}`} 
+                                    onClick={() => router.push(`/product/${item.id}`)}
+                                    className="flex flex-col h-fit"
+                                    >
+                                    <div className="relative h-[45vw] w-full rounded-[8px] overflow-hidden">
+                                        {/* Gradient overlay */}
+                                        <p className={` ${newProducts.includes(index) ? 'flex' : 'hidden'} z-10 absolute top-[12px] left-[12px] px-[8px] py-[0px] text-[12px] font-bold rounded-[12px] uppercase bg-white`} >NEW</p>
+                                        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#00000040] to-transparent"></div>
 
-                                    {/* Image */}
-                                    <Image
-                                        blurDataURL='/static/products/Wrk_Loader.png'
-                                        src={item.mainImage}
-                                        alt={item.name}
-                                        fill
-                                        className="object-cover w-full h-full"
-                                        sizes="(max-width: 768px) 50vw, 100vw"
-                                        />
+                                        {/* Image */}
+                                        <Image
+                                            blurDataURL='/static/products/Wrk_Loader.png'
+                                            src={item.mainImage}
+                                            alt={item.name}
+                                            fill
+                                            className="object-cover w-full h-full"
+                                            sizes="(max-width: 768px) 50vw, 100vw"
+                                            />
 
-                                    {/* Title overlay */}
-                                    <div className="absolute bottom-0 left-0 p-[10px] text-white text-left">
-                                        <p className="text-[18px] font-medium uppercase">{item.name}</p>
-                                        <p className="text-[12px] mt-[-4px] font-extralight uppercase">{item.title}</p>
+                                        {/* Title overlay */}
+                                        <div className="absolute bottom-0 left-0 p-[10px] text-white text-left">
+                                            <p className="text-[18px] font-medium uppercase">{item.name}</p>
+                                            <p className="text-[12px] mt-[-4px] font-extralight uppercase">{item.title}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            </button>
-                        ))}
-                    </div>
-                    : ''}
+                                </button>
+                            ))}
+                        </div>
+                    )
+                )}
             </div>
 
         </div>

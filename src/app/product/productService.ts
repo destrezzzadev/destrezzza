@@ -32,19 +32,30 @@ export interface PaginatedProducts {
 
 const PRODUCTS_COLLECTION = 'products';
 
+// Simple in-memory cache
+let cachedProducts: Product[] | null = null;
+
 export async function getProducts(page: number = 1, limit: number = 12): Promise<PaginatedProducts> {
   const start = (page - 1) * limit
   const end = start + limit
   
-  // Fetch from Firestore
-  const q = query(collection(db, PRODUCTS_COLLECTION), orderBy('createdAt', 'desc'));
-  const querySnapshot = await getDocs(q);
-  const firestoreProducts = querySnapshot.docs.map(doc => ({
-    id: doc.id,
-    ...doc.data()
-  })) as Product[];
+  let allProducts: Product[];
 
-  const allProducts = [...firestoreProducts, ...staticData];
+  if (cachedProducts) {
+    allProducts = cachedProducts;
+  } else {
+    // Fetch from Firestore
+    console.log("Fetching products from Firestore...");
+    const q = query(collection(db, PRODUCTS_COLLECTION), orderBy('createdAt', 'desc'));
+    const querySnapshot = await getDocs(q);
+    const firestoreProducts = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as Product[];
+
+    allProducts = [...firestoreProducts, ...staticData];
+    cachedProducts = allProducts;
+  }
   
   return {
     products: allProducts.slice(start, end),
