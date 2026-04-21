@@ -35,13 +35,15 @@ export async function uploadToCloudinary(formData: FormData) {
 
 export async function saveProductAction(product: Omit<Product, 'id'>, id?: string) {
   if (id) {
-    await updateProduct(id, product);
-    return id;
+    // Cast to string since Supabase uses UUIDs as strings in the client
+    await updateProduct(String(id), product);
+    return String(id);
   } else {
-    return await addProduct(product);
+    const newId = await addProduct(product);
+    return String(newId);
   }
 }
 
 export async function deleteProductAction(id: string) {
-    await deleteProduct(id);
+    await deleteProduct(String(id));
 }

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import React,{useState,useEffect, useMemo} from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { GiSettingsKnobs } from "react-icons/gi";
-import { getProducts, categories, Product } from "./productService"
+import { getProducts, getCategories, Product } from "./productService"
 import { ProductGridSkeleton } from "@/components/product/ProductSkeleton"
   
 
@@ -53,6 +53,7 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
     const [matchItems,setMatchItems] = useState(true);
 
     const [loading, setLoading] = useState(true);
+    const [categories, setCategories] = useState<Categories>({});
     
 
   // Toggle checkbox (user-driven)
@@ -123,23 +124,28 @@ const ProductClient = ({ initialCat,initialType }: Props) => {
     
 
       useEffect(() => {
-        async function loadProducts() {
+        async function loadData() {
             setLoading(true);
             try {
-                const response = await getProducts(1, 1000);
-                const sorted = [...response.products].sort((a, b) => 
+                const [prodResponse, catResponse] = await Promise.all([
+                    getProducts(1, 1000),
+                    getCategories()
+                ]);
+                
+                const sorted = [...prodResponse.products].sort((a, b) => 
                     String(a.name).localeCompare(String(b.name))
                 );
                 setAllProducts(sorted);
                 setFilteredDataState(sorted);
+                setCategories(catResponse);
             } catch (error) {
-                console.error("Failed to load products:", error);
+                console.error("Failed to load data:", error);
             } finally {
                 setLoading(false);
             }
         }
 
-        loadProducts();
+        loadData();
 
         const handleStorageChange = () => {
           const Item = JSON.parse(localStorage.getItem("selectedItem") || "null");

@@ -2,7 +2,7 @@
 'use client'
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { categories, Product } from '../../product/productService';
+import { getCategories, Product } from '../../product/productService';
 import { uploadToCloudinary, saveProductAction } from './actions';
 import Image from 'next/image';
 
@@ -22,6 +22,7 @@ export default function ProductForm({ initialProduct, mode }: ProductFormProps) 
 
   const isDev = process.env.NODE_ENV === 'development';
 
+  const [categories, setCategories] = useState<Record<string, string[]>>({});
   const [formData, setFormData] = useState<Omit<Product, 'id' | 'createdAt'>>({
     name: initialProduct?.name || (isDev && mode === 'add' ? 'Sample Chair' : ''),
     title: initialProduct?.title || (isDev && mode === 'add' ? 'Elegant Design' : ''),
@@ -34,10 +35,31 @@ export default function ProductForm({ initialProduct, mode }: ProductFormProps) 
     image: initialProduct?.image || '',
     image2: initialProduct?.image2 || '',
     cat: {
-      category: initialProduct?.cat?.category || (Object.keys(categories) as Array<keyof typeof categories>)[0],
-      subCategory: initialProduct?.cat?.subCategory || categories[(Object.keys(categories) as Array<keyof typeof categories>)[0]][0],
+      category: initialProduct?.cat?.category || '',
+      subCategory: initialProduct?.cat?.subCategory || '',
     },
   });
+
+  React.useEffect(() => {
+    async function loadCategories() {
+      const cats = await getCategories();
+      setCategories(cats);
+      
+      if (!initialProduct) {
+        const firstCat = Object.keys(cats)[0];
+        if (firstCat) {
+          setFormData(prev => ({
+            ...prev,
+            cat: {
+              category: firstCat,
+              subCategory: cats[firstCat][0] || ''
+            }
+          }));
+        }
+      }
+    }
+    loadCategories();
+  }, [initialProduct]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

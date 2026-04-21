@@ -7,9 +7,7 @@ import Footor from '@/components/Footor';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import ImageLoader from '@/components/utils/ImageLoader';
-import { getProductById, categories, Product } from '../productService'
-import productData from '../productData'
-const { data } = productData;
+import { getProductById, getProducts, Product } from '../productService'
 
 const Page = () => {
     const { id } = useParams();
@@ -19,26 +17,35 @@ const Page = () => {
     const [loading, setLoading] = useState(true);
     const [currentImage, setCurrentImage] = useState('');
     const [currentDisc, setCurrentDisc] = useState('Material');
+    const [otherCollections, setOtherCollections] = useState<Product[]>([]);
 
     // Using primitive id dependency
     const productId = String(id);
 
     React.useEffect(() => {
-        async function fetchProduct() {
+        async function loadProductData() {
             setLoading(true);
             try {
-                const fetchedProduct = await getProductById(productId);
+                const [fetchedProduct, productsResponse] = await Promise.all([
+                    getProductById(productId),
+                    getProducts(1, 15) // Fetch first 15 for "Other Collections"
+                ]);
+
                 if (fetchedProduct) {
                     setProduct(fetchedProduct);
                     setCurrentImage(fetchedProduct.mainImage);
                 }
+                
+                // Shuffle or just take products other than the current one
+                const others = productsResponse.products.filter(p => String(p.id) !== productId);
+                setOtherCollections(others.slice(0, 10));
             } catch (error) {
-                console.error("Failed to fetch product:", error);
+                console.error("Failed to fetch product data:", error);
             } finally {
                 setLoading(false);
             }
         }
-        fetchProduct();
+        loadProductData();
     }, [productId]);
 
     if (loading) {
@@ -116,7 +123,7 @@ const Page = () => {
             <div className='mt-[64px] hidden lg:block'>
                 <p className='text-[36px] font-[500] uppercase text-black'>Other Collections</p>
                 <div className="flex flex-row justify-start gap-[14px] mt-[24px] overflow-x-scroll">
-                    {data.slice(0, 10).map((item, index) => (
+                    {otherCollections.map((item, index) => (
                         <button 
                             key={`desktop-${index}`} 
                             onClick={() => router.push(`/product/${item.id}`)}
@@ -203,9 +210,9 @@ const Page = () => {
                 <p className='text-[24px] font-[500] uppercase text-black'  >Other Collections</p>
                 <div className="flex flex-row justify-start gap-[14px] mt-[24px] overflow-x-scroll">
 
-                    {data.slice(0, 10).map((item, index) => (
+                    {otherCollections.map((item, index) => (
                         <button 
-                            key={`desktop-${index}`} 
+                            key={`mobile-${index}`} 
                             onClick={() => router.push(`/product/${item.id}`)}
                             className="h-fit relative group bg-white"
                         >
